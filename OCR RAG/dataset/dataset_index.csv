@@ -1,0 +1,680 @@
+"ID","Library","Type","Image_File","Content","Student_Question","Expected_Topic"
+"P-CODE-001","Pandas","Code Screenshot","P-CODE-001.png","import pandas as pd
+
+df = pd.read_csv(""sales.csv"")
+df_2023 = df[df['year'] == 2023]
+df_2023['profit'] = df_2023['revenue'] - df_2023['cost']
+print(df_2023.head())","Why do I get a SettingWithCopyWarning when I run this?","SettingWithCopyWarning / chained assignment on a filtered DataFrame"
+"P-CODE-002","Pandas","Code Screenshot","P-CODE-002.png","import pandas as pd
+
+df = pd.DataFrame({'name': ['Ana','Ben','Cy'], 'score': [88, 92, 79]})
+top = df.loc[df['score'] > 80, 'name']
+print(top)","Is this the right way to select a single column with a condition using loc?","Boolean indexing with .loc"
+"P-CODE-003","Pandas","Code Screenshot","P-CODE-003.png","import pandas as pd
+
+df = pd.read_csv(""orders.csv"")
+grouped = df.groupby('customer_id').agg({'amount': 'sum', 'order_id': 'count'})
+grouped.columns = ['total_spent', 'num_orders']
+print(grouped.sort_values('total_spent', ascending=False).head(10))","How do I rename the columns after a groupby().agg() call like this?","groupby with multiple aggregations and column renaming"
+"P-CODE-004","Pandas","Code Screenshot","P-CODE-004.png","import pandas as pd
+
+left = pd.DataFrame({'id':[1,2,3],'name':['A','B','C']})
+right = pd.DataFrame({'id':[2,3,4],'dept':['X','Y','Z']})
+merged = left.merge(right, on='id', how='left')
+print(merged)","What's the difference between how='left' and how='inner' here?","merge() join types (inner/left/right/outer)"
+"P-CODE-005","Pandas","Code Screenshot","P-CODE-005.png","import pandas as pd
+
+df = pd.DataFrame({'date': ['2024-01-05','2024-02-14','2024-03-01']})
+df['date'] = pd.to_datetime(df['date'])
+df['month'] = df['date'].dt.month
+print(df)","Why does df['date'].month throw an error but df['date'].dt.month works?","Datetime conversion with pd.to_datetime and the .dt accessor"
+"P-CODE-006","Pandas","Code Screenshot","P-CODE-006.png","import pandas as pd
+
+df = pd.read_csv(""students.csv"")
+df['passed'] = df['grade'].apply(lambda x: 'Yes' if x >= 60 else 'No')
+print(df[['name','grade','passed']].head())","Is using apply() with a lambda like this efficient, or is there a better way?","Vectorized operations vs apply() for conditional columns"
+"P-CODE-007","Pandas","Code Screenshot","P-CODE-007.png","import pandas as pd
+
+df1 = pd.DataFrame({'a':[1,2]}, index=[0,1])
+df2 = pd.DataFrame({'a':[3,4]}, index=[0,1])
+combined = pd.concat([df1, df2], axis=0)
+print(combined)","Why do my concatenated rows keep the same index (0,1,0,1) instead of continuing (0,1,2,3)?","pd.concat() and resetting the index with ignore_index"
+"P-CODE-008","Pandas","Code Screenshot","P-CODE-008.png","import pandas as pd
+
+df = pd.DataFrame({'city':['NY','LA','NY','SF','LA','NY']})
+counts = df['city'].value_counts()
+print(counts)
+print(type(counts))","value_counts() returns something that looks like a DataFrame but the type says Series — what is it?","Series output of value_counts() and its indexing"
+"P-CODE-009","Pandas","Code Screenshot","P-CODE-009.png","import pandas as pd
+
+df = pd.DataFrame({'price': ['$10', '$25', '$7']})
+df['price'] = df['price'].str.replace('$', '').astype(float)
+print(df)","My str.replace('$', '') worked, but I've read it might raise an error on newer pandas versions — why?","Using str.replace with regex=True/False and astype for type conversion"
+"P-CODE-010","Pandas","Code Screenshot","P-CODE-010.png","import pandas as pd
+
+df = pd.DataFrame({
+    'region': ['North','South','North','South'],
+    'product': ['A','A','B','B'],
+    'sales': [100, 150, 200, 130]
+})
+pivot = df.pivot_table(index='region', columns='product', values='sales', aggfunc='sum')
+print(pivot)","How is pivot_table different from a regular groupby here?","pivot_table for reshaping data"
+"P-CODE-011","Pandas","Code Screenshot","P-CODE-011.png","import pandas as pd
+
+df = pd.DataFrame({'a':[1,2,None,4], 'b':[None,2,3,4]})
+df_clean = df.fillna(df.mean())
+print(df_clean)","Does fillna(df.mean()) fill each column with its own mean, or one overall mean?","Handling missing data with fillna() and mean imputation"
+"P-CODE-012","Pandas","Code Screenshot","P-CODE-012.png","import pandas as pd
+
+df = pd.DataFrame({'id':[1,2,3,2,1], 'val':[10,20,30,20,10]})
+dupes = df.duplicated()
+df_unique = df.drop_duplicates()
+print(dupes)
+print(df_unique)","How does duplicated() decide two rows are the same?","Detecting and dropping duplicate rows"
+"P-CODE-013","Pandas","Code Screenshot","P-CODE-013.png","import pandas as pd
+
+df = pd.DataFrame({'a':[1,2,3]}, index=['x','y','z'])
+print(df.iloc[0])
+print(df.loc['x'])","When should I use iloc vs loc? They gave the same output here.","Difference between .loc (label-based) and .iloc (position-based) indexing"
+"P-CODE-014","Pandas","Code Screenshot","P-CODE-014.png","import pandas as pd
+
+df = pd.read_csv(""inventory.csv"")
+df = df.rename(columns={'Item Name':'item_name', 'Qty':'quantity'})
+df = df[['item_name','quantity']].reset_index(drop=True)
+print(df.columns.tolist())","Why do I need reset_index(drop=True) after filtering columns?","Renaming columns and resetting the DataFrame index"
+"P-CODE-015","Pandas","Code Screenshot","P-CODE-015.png","import pandas as pd
+
+df = pd.DataFrame({'score':[55,70,85,40,95]})
+bins = [0, 60, 80, 100]
+labels = ['Low','Medium','High']
+df['category'] = pd.cut(df['score'], bins=bins, labels=labels)
+print(df)","How does pd.cut() decide which bin a boundary value like 60 falls into?","Binning continuous data with pd.cut()"
+"P-CODE-016","Pandas","Code Screenshot","P-CODE-016.png","import pandas as pd
+
+df = pd.DataFrame({'group':['A','A','B','B'], 'val':[10,20,30,40]})
+df['pct_of_group'] = df['val'] / df.groupby('group')['val'].transform('sum')
+print(df)","What does groupby().transform() do differently from groupby().agg()?","groupby().transform() for row-aligned aggregations"
+"P-CODE-017","Pandas","Code Screenshot","P-CODE-017.png","import pandas as pd
+
+df = pd.DataFrame({'a':[1,2,3], 'b':[4,5,6]})
+df['c'] = df['a'] + df['b']
+df.to_csv(""output.csv"", index=False)
+print(""Saved!"")","Why do we need index=False when saving to CSV?","Writing DataFrames to CSV with to_csv()"
+"P-ERR-001","Pandas","Traceback/Error","P-ERR-001.png",">>> df['Salary']
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""pandas/core/frame.py"", line 3893, in __getitem__
+    indexer = self.columns.get_loc(key)
+  File ""pandas/core/indexes/base.py"", line 3798, in get_loc
+    raise KeyError(key)
+KeyError: 'Salary'","I'm sure my CSV has a Salary column, so why is Python saying KeyError: 'Salary'?","KeyError from column name mismatch (whitespace/case sensitivity)"
+"P-ERR-002","Pandas","Traceback/Error","P-ERR-002.png",">>> df.groupby('dept')['salary'].mean().plot()
+>>> df2 = df.groupby('dept').sum()
+>>> df2['bonus'] = df2['salary'] * 0.1
+/tmp/ipykernel_1/123.py:3: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df2['bonus'] = df2['salary'] * 0.1","My code still ran and gave output, but I got this warning — is my result actually wrong?","SettingWithCopyWarning and copy vs view semantics"
+"P-ERR-003","Pandas","Traceback/Error","P-ERR-003.png",">>> df['price'] = df['price'].astype(float)
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""pandas/core/generic.py"", line 6324, in astype
+    new_data = self._mgr.astype(dtype=dtype, copy=copy, errors=errors)
+ValueError: could not convert string to float: '$1,200'","How do I fix this ValueError when converting my price column to float?","Cleaning string data (currency symbols, commas) before astype() conversion"
+"P-ERR-004","Pandas","Traceback/Error","P-ERR-004.png",">>> pd.read_csv(""data/sales_2024.csv"")
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""pandas/io/parsers/readers.py"", line 948, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File ""pandas/io/parsers/readers.py"", line 611, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+FileNotFoundError: [Errno 2] No such file or directory: 'data/sales_2024.csv'","The file is definitely in my project folder — why can't pandas find it?","FileNotFoundError and relative vs absolute file paths"
+"P-ERR-005","Pandas","Traceback/Error","P-ERR-005.png",">>> merged = df1.merge(df2, on='user_id')
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""pandas/core/reshape/merge.py"", line 184, in merge
+    op = _MergeOperation(
+  File ""pandas/core/reshape/merge.py"", line 706, in __init__
+    ) = self._get_merge_keys()
+  File ""pandas/core/reshape/merge.py"", line 1206, in _get_merge_keys
+    raise MergeError(msg)
+pandas.errors.MergeError: Not allowed to merge between different levels. (1 levels on the left, 2 on the right)","What does 'different levels' mean in this MergeError?","MultiIndex mismatches when merging DataFrames"
+"P-ERR-006","Pandas","Traceback/Error","P-ERR-006.png",">>> df.sort_values('revenue', asc=True)
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+TypeError: DataFrame.sort_values() got an unexpected keyword argument 'asc'","I thought 'asc' was the keyword for ascending order — what's the correct one?","Correct keyword arguments for sort_values()"
+"P-ERR-007","Pandas","Traceback/Error","P-ERR-007.png",">>> df['total'] = df['qty'] * df['unit_price']
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""pandas/core/ops/common.py"", line 76, in new_method
+    return method(self, other)
+TypeError: can't multiply sequence by non-int of type 'float'","Both columns look numeric when I print df.head() — why is this treating one as text?","Object dtype columns that look numeric but aren't (checking dtypes)"
+"P-ERR-008","Pandas","Traceback/Error","P-ERR-008.png",">>> df.iloc['name']
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""pandas/core/indexing.py"", line 1103, in __getitem__
+    return self._getitem_axis(maybe_callable, axis=axis)
+  File ""pandas/core/indexing.py"", line 1656, in _getitem_axis
+    self._validate_integer(key, axis)
+  File ""pandas/core/indexing.py"", line 1589, in _validate_integer
+    raise TypeError(""Cannot index by location index with a non-integer key"")
+TypeError: Cannot index by location index with a non-integer key","Why can't I use a column name with iloc like I do with loc?","iloc requires integer positions, not labels"
+"P-ERR-009","Pandas","Traceback/Error","P-ERR-009.png",">>> df.drop('customer_id', axis=1, inplace=True)
+>>> df.drop('customer_id', axis=1, inplace=True)
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""pandas/core/frame.py"", line 5258, in drop
+    return super().drop(
+  File ""pandas/core/generic.py"", line 4549, in drop
+    obj = obj._drop_axis(labels, axis, level=level, errors=errors)
+  File ""pandas/core/generic.py"", line 4591, in _drop_axis
+    raise KeyError(f""{labels[mask]} not found in axis"")
+KeyError: ""['customer_id'] not found in axis""","I ran the same drop line twice by accident — why does the second run fail?","inplace=True mutating the DataFrame and re-running cells in Jupyter"
+"P-ERR-010","Pandas","Traceback/Error","P-ERR-010.png",">>> avg_by_group = df.groupby('category')['price'].mean()
+>>> df['price_diff'] = df['price'] - avg_by_group['category']
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""pandas/core/series.py"", line 981, in __getitem__
+    return self._get_value(key)
+  File ""pandas/core/series.py"", line 1089, in _get_value
+    loc = self.index.get_loc(label)
+KeyError: 'category'","I want each row's price minus its category's average price — what am I doing wrong?","groupby().transform() vs indexing a grouped Series incorrectly"
+"P-ERR-011","Pandas","Traceback/Error","P-ERR-011.png",">>> df.plot(x='date', y='sales')
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+ModuleNotFoundError: No module named 'matplotlib'","Why do I need matplotlib installed just to call df.plot()?","pandas plotting backend dependency on matplotlib"
+"P-ERR-012","Pandas","Traceback/Error","P-ERR-012.png",">>> df['age'].fillna(df['age'].mode(), inplace=True)
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""pandas/core/generic.py"", line 6591, in fillna
+    return self._fillna_with_value(value, ...)
+ValueError: ""value"" parameter must be a scalar, dict or Series, but you passed a ""Series""","df['age'].mode() looks like it should give me one number — why is it a Series with multiple values?","mode() returning multiple values and scalar extraction for fillna"
+"P-ERR-013","Pandas","Traceback/Error","P-ERR-013.png",">>> combined = pd.concat([df_2022, df_2023], axis=1)
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""pandas/core/reshape/concat.py"", line 372, in concat
+    op = _Concatenator(
+  File ""pandas/core/reshape/concat.py"", line 458, in __init__
+    raise ValueError(""No objects to concatenate"")
+ValueError: No objects to concatenate","I passed two DataFrames in a list, so why does pandas say there's nothing to concatenate?","Debugging empty/undefined DataFrame inputs to pd.concat()"
+"P-ERR-014","Pandas","Traceback/Error","P-ERR-014.png",">>> df.set_index('order_date', inplace=True)
+>>> df.loc['2024-01-01':'2024-01-31']
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""pandas/core/indexing.py"", line 1420, in __getitem__
+    return self._getitem_axis(maybe_callable, axis=axis)
+KeyError: '2024-01-01'","I set order_date as my index, so why can't I slice it with date strings?","Slicing by date requires a DatetimeIndex (pd.to_datetime before set_index)"
+"P-ERR-015","Pandas","Traceback/Error","P-ERR-015.png",">>> df.apply(lambda row: row['a'] + row['b'])
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""pandas/core/frame.py"", line 10034, in apply
+    return op.apply().__finalize__(self, method=""apply"")
+  File ""pandas/core/apply.py"", line 837, in apply
+    return self.apply_standard()
+KeyError: 'a'","Why does df.apply(lambda row: row['a']...) say KeyError: 'a' when 'a' is definitely a column?","apply() default axis=0 (columns) vs axis=1 (rows)"
+"P-ERR-016","Pandas","Traceback/Error","P-ERR-016.png",">>> df[df['score'] > 80 and df['passed'] == True]
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""pandas/core/generic.py"", line 1577, in __nonzero__
+    raise ValueError(
+ValueError: The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.isna().any()","Why can't I combine two conditions with 'and' like in normal Python?","Combining boolean masks with & / | instead of and/or"
+"P-ERR-017","Pandas","Traceback/Error","P-ERR-017.png",">>> df.describe()
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""pandas/core/generic.py"", line 11434, in describe
+    return describe_ndframe(obj=self, ...)
+  File ""pandas/core/methods/describe.py"", line 91, in describe_ndframe
+    raise ValueError(""Cannot describe a DataFrame without columns"")
+ValueError: Cannot describe a DataFrame without columns","I filtered my DataFrame and now describe() fails — how do I check if it's empty first?","Empty DataFrame after over-restrictive filtering"
+"P-OUT-001","Pandas","Jupyter Output","P-OUT-001.png","In [12]: df.info()
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 500 entries, 0 to 499
+Data columns (total 5 columns):
+ #   Column     Non-Null Count  Dtype
+---  ------     --------------  -----
+ 0   name       500 non-null    object
+ 1   age        487 non-null    float64
+ 2   income     500 non-null    int64
+ 3   city       495 non-null    object
+ 4   joined_on  500 non-null    object
+dtypes: float64(1), int64(1), object(3)
+memory usage: 19.7+ KB","How do I read this output to figure out which columns have missing data?","Interpreting df.info() for null counts and dtypes"
+"P-OUT-002","Pandas","Jupyter Output","P-OUT-002.png","In [7]: df.describe()
+Out[7]:
+             age       income
+count  487.000000    500.000000
+mean    34.215606  52340.128000
+std     11.834271  18422.553921
+min     18.000000   9800.000000
+25%     25.000000  38900.000000
+50%     33.000000  50250.000000
+75%     42.000000  64500.000000
+max     79.000000 175000.000000","Why does 'age' only count 487 while income counts 500? And what does the 75% row mean?","Reading summary statistics from describe() (count, quartiles)"
+"P-OUT-003","Pandas","Jupyter Output","P-OUT-003.png","In [3]: df.head()
+Out[3]:
+   id     name  score
+0   1    Alice   85.0
+1   2      Bob    NaN
+2   3  Charlie   92.0
+3   4    Diana    NaN
+4   5    Ethan   77.0","What does NaN actually mean here, and will it break my later calculations?","Understanding NaN as missing values in pandas"
+"P-OUT-004","Pandas","Jupyter Output","P-OUT-004.png","In [15]: df.dtypes
+Out[15]:
+order_id        int64
+customer         object
+order_date       object
+amount          float64
+is_returned        bool
+dtype: object","order_date is a date but it shows as 'object' — is that a problem?","Object dtype for date strings vs proper datetime64 dtype"
+"P-OUT-005","Pandas","Jupyter Output","P-OUT-005.png","In [9]: df.groupby('department')['salary'].mean()
+Out[9]:
+department
+Engineering    92500.00
+Marketing      67300.50
+Sales          71200.75
+Support        54800.00
+Name: salary, dtype: float64","Why is 'department' shown separately above the values instead of as a normal column?","groupby() output structure and the resulting index"
+"P-OUT-006","Pandas","Jupyter Output","P-OUT-006.png","In [21]: df.isna().sum()
+Out[21]:
+name        0
+email       3
+phone      45
+address    12
+signup      0
+dtype: int64","With 45 missing phone numbers out of how many rows, should I drop the column or fill it?","Assessing missing-data severity with isna().sum()"
+"P-OUT-007","Pandas","Jupyter Output","P-OUT-007.png","In [4]: df.shape
+Out[4]: (10000, 8)
+
+In [5]: df.drop_duplicates().shape
+Out[5]: (9840, 8)","This tells me there were duplicates, but how do I see which rows were actually removed?","Verifying row counts before/after drop_duplicates()"
+"P-OUT-008","Pandas","Jupyter Output","P-OUT-008.png","In [11]: df['category'].value_counts(normalize=True)
+Out[11]:
+Electronics    0.412
+Clothing       0.288
+Home           0.201
+Toys           0.099
+Name: category, dtype: float64","What does normalize=True change compared to the regular value_counts()?","value_counts(normalize=True) for proportions instead of counts"
+"P-OUT-009","Pandas","Jupyter Output","P-OUT-009.png","In [6]: df.loc[df['price'] < 0]
+Out[6]:
+Empty DataFrame
+Columns: [product_id, product_name, price, stock]
+Index: []","Does 'Empty DataFrame' mean my filter is broken, or that there really are no negative prices?","Interpreting an empty DataFrame result from boolean filtering"
+"P-OUT-010","Pandas","Jupyter Output","P-OUT-010.png","In [18]: df.corr(numeric_only=True)
+Out[18]:
+              age    income  spend_score
+age         1.000    0.123       -0.045
+income      0.123    1.000        0.678
+spend_score -0.045   0.678        1.000","How do I interpret a correlation of 0.678 between income and spend_score?","Reading a correlation matrix from df.corr()"
+"P-OUT-011","Pandas","Jupyter Output","P-OUT-011.png","In [2]: df['grade'].unique()
+Out[2]: array(['A', 'B', 'A', 'C', 'B', 'a', 'B '], dtype=object)","Why does unique() show 'A' and 'a' and 'B ' as different values when they should be the same grade?","Data cleaning: case sensitivity and whitespace in categorical values"
+"P-OUT-012","Pandas","Jupyter Output","P-OUT-012.png","In [30]: df.memory_usage(deep=True)
+Out[30]:
+Index          128
+id           80000
+name        620000
+category     55000
+price        80000
+dtype: int64","The 'name' column uses way more memory than the numeric ones — how can I reduce that?","Memory usage of object dtype columns and optimizing with category dtype"
+"P-OUT-013","Pandas","Jupyter Output","P-OUT-013.png","In [8]: df.pivot_table(index='month', columns='region', values='sales', aggfunc='sum', fill_value=0)
+Out[8]:
+region   East  North  South  West
+month
+Jan       120    340    210   180
+Feb       150    360    190   200
+Mar       140    310    230   210","What does fill_value=0 do here — why would there be missing combinations?","pivot_table() handling missing group combinations"
+"P-OUT-014","Pandas","Jupyter Output","P-OUT-014.png","In [5]: df.sample(3, random_state=42)
+Out[5]:
+     id    name  score
+482 483   Priya     91
+17   18    Omar     68
+305 306   Lena     75","Why does random_state=42 matter if I'm just sampling random rows?","Reproducibility with random_state in sampling"
+"P-OUT-015","Pandas","Jupyter Output","P-OUT-015.png","In [14]: df['signup_date'].dt.day_name().value_counts()
+Out[14]:
+Monday       412
+Tuesday      388
+Friday       375
+Wednesday    360
+Thursday     351
+Saturday     190
+Sunday       178
+Name: count, dtype: int64","Do I need to convert signup_date to datetime first before .dt.day_name() works?","Extracting components from datetime columns with the .dt accessor"
+"P-OUT-016","Pandas","Jupyter Output","P-OUT-016.png","In [10]: df.query('age > 30 and city == ""Cairo""').shape
+Out[10]: (58, 6)","Is df.query() just a shortcut for boolean indexing, or does it work differently?","Using DataFrame.query() as an alternative to boolean masks"
+"S-CODE-001","Scikit-learn","Code Screenshot","S-CODE-001.png","from sklearn.model_selection import train_test_split
+
+X = df[['age','income']]
+y = df['purchased']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+print(X_train.shape, X_test.shape)","What does random_state=42 actually control in train_test_split?","train_test_split() and reproducible random splits"
+"S-CODE-002","Scikit-learn","Code Screenshot","S-CODE-002.png","from sklearn.linear_model import LogisticRegression
+
+model = LogisticRegression()
+model.fit(X_train, y_train)
+predictions = model.predict(X_test)
+print(predictions[:10])","Do I need to scale my features before fitting LogisticRegression?","Feature scaling requirements for LogisticRegression"
+"S-CODE-003","Scikit-learn","Code Screenshot","S-CODE-003.png","from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)","Why do I use fit_transform on training data but only transform on test data?","Avoiding data leakage: fit_transform vs transform"
+"S-CODE-004","Scikit-learn","Code Screenshot","S-CODE-004.png","from sklearn.preprocessing import LabelEncoder
+
+le = LabelEncoder()
+df['city_encoded'] = le.fit_transform(df['city'])
+print(df[['city','city_encoded']].drop_duplicates())","Is LabelEncoder the right choice for a column like 'city' that has no natural order?","LabelEncoder vs OneHotEncoder for nominal categorical data"
+"S-CODE-005","Scikit-learn","Code Screenshot","S-CODE-005.png","from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+
+clf = RandomForestClassifier(n_estimators=100, random_state=42)
+clf.fit(X_train, y_train)
+y_pred = clf.predict(X_test)
+print(""Accuracy:"", accuracy_score(y_test, y_pred))","How do I choose a good value for n_estimators?","RandomForestClassifier hyperparameters (n_estimators)"
+"S-CODE-006","Scikit-learn","Code Screenshot","S-CODE-006.png","from sklearn.model_selection import cross_val_score
+from sklearn.tree import DecisionTreeClassifier
+
+clf = DecisionTreeClassifier(random_state=0)
+scores = cross_val_score(clf, X, y, cv=5)
+print(scores)
+print(""Mean:"", scores.mean())","What does cv=5 mean and why do I get 5 different scores instead of one?","K-fold cross-validation with cross_val_score"
+"S-CODE-007","Scikit-learn","Code Screenshot","S-CODE-007.png","from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+
+pipe = Pipeline([
+    ('scaler', StandardScaler()),
+    ('svc', SVC(kernel='rbf'))
+])
+pipe.fit(X_train, y_train)
+print(pipe.score(X_test, y_test))","What's the benefit of wrapping the scaler and model together in a Pipeline?","Building preprocessing + model pipelines with Pipeline"
+"S-CODE-008","Scikit-learn","Code Screenshot","S-CODE-008.png","from sklearn.model_selection import GridSearchCV
+from sklearn.svm import SVC
+
+param_grid = {'C': [0.1, 1, 10], 'kernel': ['linear','rbf']}
+grid = GridSearchCV(SVC(), param_grid, cv=3)
+grid.fit(X_train, y_train)
+print(grid.best_params_)","How does GridSearchCV decide which combination of parameters is best?","Hyperparameter tuning with GridSearchCV"
+"S-CODE-009","Scikit-learn","Code Screenshot","S-CODE-009.png","from sklearn.cluster import KMeans
+
+kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
+kmeans.fit(X)
+df['cluster'] = kmeans.labels_
+print(df.groupby('cluster').mean(numeric_only=True))","How do I decide the right number of clusters instead of guessing n_clusters=3?","Choosing k in KMeans (elbow method / silhouette score)"
+"S-CODE-010","Scikit-learn","Code Screenshot","S-CODE-010.png","from sklearn.decomposition import PCA
+
+pca = PCA(n_components=2)
+X_reduced = pca.fit_transform(X_scaled)
+print(pca.explained_variance_ratio_)","What does explained_variance_ratio_ tell me about my 2 components?","Dimensionality reduction with PCA and explained variance"
+"S-CODE-011","Scikit-learn","Code Screenshot","S-CODE-011.png","from sklearn.metrics import confusion_matrix, classification_report
+
+y_pred = model.predict(X_test)
+print(confusion_matrix(y_test, y_pred))
+print(classification_report(y_test, y_pred))","How do I read precision vs recall in this classification_report?","Interpreting confusion_matrix and classification_report"
+"S-CODE-012","Scikit-learn","Code Screenshot","S-CODE-012.png","import joblib
+from sklearn.linear_model import LogisticRegression
+
+model = LogisticRegression()
+model.fit(X_train, y_train)
+joblib.dump(model, 'model.pkl')
+
+loaded_model = joblib.load('model.pkl')
+print(loaded_model.predict(X_test[:5]))","Is joblib the recommended way to save scikit-learn models, or should I use pickle?","Saving and loading trained models with joblib"
+"S-CODE-013","Scikit-learn","Code Screenshot","S-CODE-013.png","from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+
+preprocessor = ColumnTransformer([
+    ('num', StandardScaler(), ['age','income']),
+    ('cat', OneHotEncoder(), ['city'])
+])
+X_transformed = preprocessor.fit_transform(df)
+print(X_transformed.shape)","How does ColumnTransformer know which columns to apply which transformer to?","Combining transformers for mixed-type data with ColumnTransformer"
+"S-CODE-014","Scikit-learn","Code Screenshot","S-CODE-014.png","from sklearn.impute import SimpleImputer
+
+imputer = SimpleImputer(strategy='median')
+X_train_imputed = imputer.fit_transform(X_train)
+X_test_imputed = imputer.transform(X_test)","Why use SimpleImputer instead of just calling pandas fillna()?","Handling missing values with SimpleImputer inside an sklearn workflow"
+"S-CODE-015","Scikit-learn","Code Screenshot","S-CODE-015.png","from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+
+lr = LinearRegression()
+lr.fit(X_train, y_train)
+y_pred = lr.predict(X_test)
+print(""MSE:"", mean_squared_error(y_test, y_pred))
+print(""R2:"", r2_score(y_test, y_pred))","What counts as a 'good' R2 score for this kind of regression?","Evaluating regression models with MSE and R2"
+"S-CODE-016","Scikit-learn","Code Screenshot","S-CODE-016.png","from sklearn.neighbors import KNeighborsClassifier
+
+knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(X_train_scaled, y_train)
+print(knn.score(X_test_scaled, y_test))","How do I pick a good value for n_neighbors in KNN?","Choosing k in KNeighborsClassifier and the effect on bias/variance"
+"S-CODE-017","Scikit-learn","Code Screenshot","S-CODE-017.png","from sklearn.ensemble import RandomForestClassifier
+import pandas as pd
+
+clf = RandomForestClassifier(random_state=1)
+clf.fit(X_train, y_train)
+importances = pd.Series(clf.feature_importances_, index=X_train.columns)
+print(importances.sort_values(ascending=False))","How should I interpret feature_importances_ values that are close to zero?","Reading feature_importances_ from tree-based models"
+"S-ERR-001","Scikit-learn","Traceback/Error","S-ERR-001.png",">>> model.predict(X_test)
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""sklearn/linear_model/_base.py"", line 447, in predict
+    return self._decision_function(X)
+  File ""sklearn/utils/validation.py"", line 1461, in check_is_fitted
+    raise NotFittedError(msg % {""name"": type(estimator).__name__})
+sklearn.exceptions.NotFittedError: This LogisticRegression instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.","I definitely called model.fit() a few cells above — why does it say the model isn't fitted?","NotFittedError and re-instantiating an estimator variable accidentally"
+"S-ERR-002","Scikit-learn","Traceback/Error","S-ERR-002.png",">>> model.fit(X_train, y_train)
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""sklearn/base.py"", line 1152, in fit
+    X, y = self._validate_data(X, y, ...)
+  File ""sklearn/utils/validation.py"", line 1104, in check_X_y
+    X, y = check_consistent_length(X, y)
+  File ""sklearn/utils/validation.py"", line 397, in check_consistent_length
+    raise ValueError(
+ValueError: Found input variables with inconsistent numbers of samples: [7999, 8000]","My X and y came from the same DataFrame — why would they have different lengths?","Mismatched sample counts between X and y (e.g. after dropna on one but not the other)"
+"S-ERR-003","Scikit-learn","Traceback/Error","S-ERR-003.png",">>> model.predict(new_data)
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""sklearn/linear_model/_base.py"", line 447, in predict
+    return self._decision_function(X)
+  File ""sklearn/utils/validation.py"", line 605, in _validate_data
+    self._check_n_features(X, reset=False)
+  File ""sklearn/base.py"", line 400, in _check_n_features
+    raise ValueError(
+ValueError: X has 3 features, but LogisticRegression is expecting 5 features as input.","I trained on 5 columns but my new_data only has 3 — how do I fix this without retraining?","Feature mismatch between training data and prediction data"
+"S-ERR-004","Scikit-learn","Traceback/Error","S-ERR-004.png",">>> model.fit(df[['age']], df['purchased'])
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""sklearn/base.py"", line 1152, in fit
+    X, y = self._validate_data(X, y, ...)
+  File ""sklearn/utils/validation.py"", line 921, in check_array
+    raise ValueError(
+ValueError: Expected 2D array, got 1D array instead:
+array=[25. 34. 41. 29. ...].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.","I used df[['age']] with double brackets — why is scikit-learn still seeing it as 1D?","1D vs 2D array shape requirements for scikit-learn (this error usually means a Series slipped through)"
+"S-ERR-005","Scikit-learn","Traceback/Error","S-ERR-005.png",">>> model.fit(X_train, y_train)
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""sklearn/base.py"", line 1152, in fit
+    X, y = self._validate_data(X, y, ...)
+  File ""sklearn/utils/validation.py"", line 921, in check_array
+    array = np.asarray(array, order=order, dtype=dtype)
+ValueError: could not convert string to float: 'Male'","I have a 'gender' column with 'Male'/'Female' — how do I get sklearn to accept it?","Encoding categorical features before fitting scikit-learn models"
+"S-ERR-006","Scikit-learn","Traceback/Error","S-ERR-006.png",">>> from sklearn.cross_validation import train_test_split
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+ModuleNotFoundError: No module named 'sklearn.cross_validation'","A tutorial I found online uses sklearn.cross_validation but it's not working — is the tutorial wrong?","Deprecated sklearn.cross_validation module replaced by sklearn.model_selection"
+"S-ERR-007","Scikit-learn","Traceback/Error","S-ERR-007.png",">>> model.fit(X_train, y_train)
+/usr/lib/python3.11/site-packages/sklearn/linear_model/_logistic.py:458: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. of ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(","My model still produced predictions despite this warning — should I be worried about it?","ConvergenceWarning in LogisticRegression: scaling features and increasing max_iter"
+"S-ERR-008","Scikit-learn","Traceback/Error","S-ERR-008.png",">>> knn.fit(X_train, y_train)
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""sklearn/base.py"", line 1152, in fit
+    X, y = self._validate_data(X, y, ...)
+  File ""sklearn/utils/validation.py"", line 999, in check_array
+    raise ValueError(
+ValueError: Input X contains NaN.
+KNeighborsClassifier does not accept missing values encoded as NaN natively.","My data had some NaN values I forgot about — do I have to drop those rows or can I fill them?","Handling NaN values before fitting scikit-learn estimators"
+"S-ERR-009","Scikit-learn","Traceback/Error","S-ERR-009.png",">>> scaler.transform(X_test)
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""sklearn/preprocessing/_data.py"", line 1006, in transform
+    X = self._validate_data(
+  File ""sklearn/utils/validation.py"", line 605, in _validate_data
+    self._check_n_features(X, reset=False)
+ValueError: X has 4 features, but StandardScaler is expecting 6 features as input.","I fit the scaler on the full dataset but transform on a subset of columns — is that the issue?","Column mismatch between fit and transform steps of a scaler"
+"S-ERR-010","Scikit-learn","Traceback/Error","S-ERR-010.png",">>> from sklearn.metrics import accuracy_score
+>>> accuracy_score(y_test, y_pred_proba)
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""sklearn/metrics/_classification.py"", line 221, in accuracy_score
+    y_type, y_true, y_pred = _check_targets(y_true, y_pred)
+  File ""sklearn/metrics/_classification.py"", line 104, in _check_targets
+    raise ValueError(
+ValueError: Classification metrics can't handle a mix of binary and continuous targets","I passed predict_proba() output instead of predict() output by mistake — how do I tell the difference?","predict() vs predict_proba() outputs and matching metric functions"
+"S-ERR-011","Scikit-learn","Traceback/Error","S-ERR-011.png",">>> tree.fit(X_train, y_train)
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""sklearn/tree/_classes.py"", line 889, in fit
+    super()._fit(
+  File ""sklearn/tree/_classes.py"", line 186, in _fit
+    check_classification_targets(y)
+  File ""sklearn/utils/multiclass.py"", line 220, in check_classification_targets
+    raise ValueError(""Unknown label type: %r"" % y_type)
+ValueError: Unknown label type: continuous","I'm trying to predict a category but sklearn thinks my labels are continuous — why?","Continuous vs categorical target confusion (regression vs classification labels)"
+"S-ERR-012","Scikit-learn","Traceback/Error","S-ERR-012.png",">>> import sklearn
+>>> from sklearn.externals import joblib
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+ModuleNotFoundError: No module named 'sklearn.externals'","An old Stack Overflow answer says to import joblib from sklearn.externals — why doesn't that work anymore?","Deprecated sklearn.externals.joblib — use standalone joblib package instead"
+"S-ERR-013","Scikit-learn","Traceback/Error","S-ERR-013.png",">>> ohe.fit_transform(df[['city']])
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""sklearn/preprocessing/_encoders.py"", line 883, in fit_transform
+    return super().fit_transform(X, y)
+TypeError: fit_transform() takes 2 positional arguments but 3 were given","I called ohe.fit_transform(df[['city']]) — where's the third argument coming from?","Common OneHotEncoder misuse: calling instance method incorrectly (missing self binding / wrong import)"
+"S-ERR-014","Scikit-learn","Traceback/Error","S-ERR-014.png",">>> grid.fit(X_train, y_train)
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""sklearn/model_selection/_search.py"", line 874, in fit
+    base_estimator = clone(self.estimator)
+  File ""sklearn/base.py"", line 87, in clone
+    raise TypeError(
+TypeError: Cannot clone object 'SVC(kernel=rbf, C=10)', as the constructor does not seem to set parameter kernel","I customized my SVC object before passing it into GridSearchCV — why does that break cloning?","GridSearchCV requires unfitted, properly constructed estimators (avoid passing pre-set custom instances incorrectly)"
+"S-ERR-015","Scikit-learn","Traceback/Error","S-ERR-015.png",">>> X_train_scaled = scaler.fit_transform(X_train)
+>>> pca.fit(X_train)
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""sklearn/decomposition/_pca.py"", line 460, in fit
+    self._fit(X)
+  File ""sklearn/decomposition/_pca.py"", line 482, in _fit
+    X = self._validate_data(
+  File ""sklearn/utils/validation.py"", line 999, in check_array
+    raise ValueError(
+ValueError: Input X contains NaN.","I scaled X_train but then accidentally fit PCA on the unscaled X_train — is that related to this NaN error?","Pipeline ordering mistakes: fitting on the wrong (unscaled/uncleaned) variable"
+"S-ERR-016","Scikit-learn","Traceback/Error","S-ERR-016.png",">>> from sklearn.metrics import plot_confusion_matrix
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+ImportError: cannot import name 'plot_confusion_matrix' from 'sklearn.metrics'","A course video uses plot_confusion_matrix but my import fails — did it get removed?","Deprecated plot_confusion_matrix replaced by ConfusionMatrixDisplay"
+"S-ERR-017","Scikit-learn","Traceback/Error","S-ERR-017.png",">>> print(cross_val_score(model, X, y, cv=5))
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""sklearn/model_selection/_validation.py"", line 515, in cross_val_score
+    cv = check_cv(cv, y, classifier=is_classifier(estimator))
+  File ""sklearn/model_selection/_split.py"", line 2288, in split
+    raise ValueError(
+ValueError: n_splits=5 cannot be greater than the number of members in each class.","My dataset has 500 rows total, so why is cv=5 too many splits?","Stratified k-fold requiring enough samples per class in imbalanced datasets"
+"S-OUT-001","Scikit-learn","Jupyter Output","S-OUT-001.png","In [9]: print(classification_report(y_test, y_pred))
+              precision    recall  f1-score   support
+
+           0       0.91      0.95      0.93       120
+           1       0.78      0.65      0.71        40
+
+    accuracy                           0.88       160
+   macro avg       0.85      0.80      0.82       160
+weighted avg       0.88      0.88      0.88       160","Class 1 has much lower recall than class 0 — what does that mean and should I worry about it?","Interpreting per-class precision/recall/f1 in classification_report (class imbalance)"
+"S-OUT-002","Scikit-learn","Jupyter Output","S-OUT-002.png","In [4]: confusion_matrix(y_test, y_pred)
+Out[4]:
+array([[85,  6],
+       [12, 37]])","How do I map these four numbers to true positives, false positives, etc.?","Reading a 2x2 confusion matrix layout"
+"S-OUT-003","Scikit-learn","Jupyter Output","S-OUT-003.png","In [6]: X_train.shape, X_test.shape, y_train.shape, y_test.shape
+Out[6]: ((800, 4), (200, 4), (800,), (200,))","Why is y_train shown as (800,) with no second number, while X_train has (800, 4)?","Shape differences between 2D feature arrays and 1D target arrays"
+"S-OUT-004","Scikit-learn","Jupyter Output","S-OUT-004.png","In [11]: grid.best_params_
+Out[11]: {'C': 10, 'kernel': 'rbf'}
+
+In [12]: grid.best_score_
+Out[12]: 0.8734375","Is best_score_ the accuracy on my test set, or something else?","GridSearchCV best_params_ and best_score_ (cross-validated training score)"
+"S-OUT-005","Scikit-learn","Jupyter Output","S-OUT-005.png","In [8]: cross_val_score(clf, X, y, cv=5)
+Out[8]: array([0.82, 0.79, 0.85, 0.81, 0.77])","The scores vary quite a bit between folds (0.77 to 0.85) — is that normal?","Variance across cross-validation folds and what it indicates"
+"S-OUT-006","Scikit-learn","Jupyter Output","S-OUT-006.png","In [3]: pca.explained_variance_ratio_
+Out[3]: array([0.482, 0.231, 0.109])
+
+In [4]: pca.explained_variance_ratio_.cumsum()
+Out[4]: array([0.482, 0.713, 0.822])","How many components should I keep if I want to preserve at least 80% of the variance?","Choosing the number of PCA components via cumulative explained variance"
+"S-OUT-007","Scikit-learn","Jupyter Output","S-OUT-007.png","In [14]: pd.Series(clf.feature_importances_, index=X.columns).sort_values(ascending=False)
+Out[14]:
+income        0.412
+age           0.298
+tenure        0.201
+num_visits    0.089
+dtype: float64","Does this mean I could drop num_visits from my model without losing much accuracy?","Using feature_importances_ for feature selection"
+"S-OUT-008","Scikit-learn","Jupyter Output","S-OUT-008.png","In [5]: model.coef_
+Out[5]: array([[ 0.834, -1.207,  0.056]])
+
+In [6]: model.intercept_
+Out[6]: array([-0.732])","Why is coef_ a 2D array with one row instead of just three numbers?","Shape of coef_ and intercept_ in LogisticRegression for binary classification"
+"S-OUT-009","Scikit-learn","Jupyter Output","S-OUT-009.png","In [7]: kmeans.inertia_
+Out[7]: 1523.87
+
+In [8]: for k in range(1,8):
+    ...:     km = KMeans(n_clusters=k, n_init=10, random_state=0).fit(X)
+    ...:     print(k, km.inertia_)
+1 5400.32
+2 2891.10
+3 1523.87
+4 1310.55
+5 1240.02
+6 1198.71
+7 1175.40","How do I use these inertia numbers to pick the best k with the elbow method?","Elbow method for choosing k using KMeans inertia_"
+"S-OUT-010","Scikit-learn","Jupyter Output","S-OUT-010.png","In [2]: model.score(X_train, y_train)
+Out[2]: 0.98
+
+In [3]: model.score(X_test, y_test)
+Out[3]: 0.71","98% on training but only 71% on test — is my model overfitting?","Diagnosing overfitting from a train/test accuracy gap"
+"S-OUT-011","Scikit-learn","Jupyter Output","S-OUT-011.png","In [9]: from sklearn.metrics import roc_auc_score
+    ...: roc_auc_score(y_test, y_proba[:, 1])
+Out[9]: 0.9124","What counts as a good ROC-AUC score, and why do I need y_proba[:, 1] instead of y_pred?","ROC-AUC score interpretation and using predicted probabilities"
+"S-OUT-012","Scikit-learn","Jupyter Output","S-OUT-012.png","In [4]: le.classes_
+Out[4]: array(['Cairo', 'Giza', 'Luxor'], dtype=object)
+
+In [5]: le.transform(['Giza'])
+Out[5]: array([1])","How do I know which original city name corresponds to encoded value 1?","Mapping LabelEncoder.classes_ back to original category labels"
+"S-OUT-013","Scikit-learn","Jupyter Output","S-OUT-013.png","In [16]: type(X_transformed)
+Out[16]: <class 'scipy.sparse._csr.csr_matrix'>
+
+In [17]: X_transformed.shape
+Out[17]: (1000, 25)","OneHotEncoder gave me something called a csr_matrix instead of a normal array — what is that?","Sparse matrix output from OneHotEncoder and converting with .toarray()"
+"S-OUT-014","Scikit-learn","Jupyter Output","S-OUT-014.png","In [1]: from sklearn.datasets import load_iris
+    ...: iris = load_iris()
+    ...: print(iris.data.shape, iris.target.shape)
+(150, 4) (150,)
+
+In [2]: print(iris.target_names)
+['setosa' 'versicolor' 'virginica']","Why is the built-in iris dataset stored differently from a regular pandas DataFrame?","Structure of scikit-learn's bunch/dataset objects (load_iris)"
+"S-OUT-015","Scikit-learn","Jupyter Output","S-OUT-015.png","In [12]: from sklearn.metrics import mean_absolute_error, mean_squared_error
+    ...: print(""MAE:"", mean_absolute_error(y_test, y_pred))
+    ...: print(""RMSE:"", mean_squared_error(y_test, y_pred, squared=False))
+MAE: 4231.56
+RMSE: 6102.89","Why is RMSE higher than MAE for the same predictions?","Comparing MAE and RMSE and what the gap suggests about outliers"
+"S-OUT-016","Scikit-learn","Jupyter Output","S-OUT-016.png","In [3]: print(pipe.named_steps)
+Out[3]: {'scaler': StandardScaler(), 'svc': SVC(C=10, kernel='rbf')}
+
+In [4]: pipe.named_steps['svc'].support_vectors_.shape
+Out[4]: (143, 4)","How do I reach into a Pipeline to inspect one specific step like the SVC support vectors?","Accessing individual steps of a fitted Pipeline via named_steps"
