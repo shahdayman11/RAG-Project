@@ -1,0 +1,143 @@
+Question,Route,Retrieved Source,Answer,Context Relevant,Grounded,Correct
+How do I create a NumPy array?,RETRIEVE,None | None | Page None; None | None | Page None; None | None | Page None; None | None | Page None; None | None | Page None,"You can create a NumPy array in several ways:
+
+| Method | Code example | What it does |
+|--------|--------------|--------------|
+| **From a Python list or tuple** | `a = np.array([1, 2, 3])`<br>`b = np.array([[1, 2, 3], [4, 5, 6]])` | Builds an array with the same shape as the nested list. |
+| **Specify the data type** | `c = np.array([1, 2, 3], dtype=np.float32)` | Creates the array with the given dtype. |
+| **Built‑in constructors** | `np.zeros((2, 3))`<br>`np.ones((3, 3))`<br>`np.full((2, 2), 7)`<br>`np.empty((2, 3))`<br>`np.eye(3)`<br>`np.identity(4)`<br>`np.diag([1, 2, 3])` | Generates arrays of zeros, ones, a constant value, uninitialized values, identity matrices, or a diagonal matrix. |
+| **Ranges and sequences** | `np.arange(0, 10, 2)`<br>`np.linspace(0, 1, 5)`<br>`np.logspace(0, 3, 4)` | Creates evenly spaced values or log‑spaced values. |
+| **Random arrays** | `np.random.rand(2, 3)`<br>`np.random.randn(2, 3)`<br>`np.random.randint(0, 10, 5)` | Generates arrays with random numbers from uniform, normal, or integer distributions. |
+| **Array‑like templates** | `np.zeros_like(x)`<br>`np.ones_like(x)`<br>`np.full_like(x, 9)` | Creates an array with the same shape/dtype as `x`, filled with zeros, ones, or a constant. |
+
+These snippets cover the most common ways to create a NumPy array.",Yes,Yes,Yes
+How do I reshape a NumPy array?,RETRIEVE,None | None | Page None; None | None | Page None; None | None | Page None; None | None | Page None; None | None | Page None,"To change the shape of a NumPy array you use **`reshape`** (or the equivalent `np.reshape` function).  
+
+```python
+import numpy as np
+
+a = np.arange(12)          # 1‑D array of 12 elements
+
+# 1. Basic reshape – give a new shape as a tuple
+b = a.reshape(3, 4)        # 3 rows, 4 columns
+
+# 2. Let NumPy infer one dimension
+c = a.reshape(3, -1)       # -1 tells NumPy to compute that size
+
+# 3. Reshape a masked array
+#    (same syntax, just with a masked array)
+#    >>> np.ma.reshape(a, (2, 6))
+
+# 4. Reshape in place (changes the original array)
+#    a.resize((2, 6))      # modifies a directly
+
+# 5. Order of elements can be specified
+d = a.reshape(2, 6, order='F')   # Fortran‑style ordering
+
+# 6. View vs copy
+#    reshape returns a view when possible; otherwise it makes a copy.
+#    For example:
+#    >>> a.reshape(3, 4).T   # transpose – still a view
+```
+
+**Key points from the documentation**
+
+* `ndarray.reshape(new_shape)` or `np.reshape(a, new_shape)` – returns an array with the same data but a new shape.
+* You can pass multiple integers instead of a single tuple: `a.reshape(3, 4)` is the same as `a.reshape((3, 4))`.
+* Use `-1` for one dimension to let NumPy infer the size.
+* The `order` keyword (`'C'` for C‑style, `'F'` for Fortran‑style) controls how elements are read and written.
+* For masked arrays, use `np.ma.reshape` – the syntax is identical.
+
+That’s all you need to reshape a NumPy array.",Yes,Yes,Yes
+How do I concatenate arrays in NumPy?,RETRIEVE,None | None | Page None; None | None | Page None; None | None | Page None; None | None | Page None; None | None | Page None,"To concatenate arrays in NumPy you use **`np.concatenate`** (or its shorthand `np.concat`).  
+
+```python
+import numpy as np
+
+# Example
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+
+# Concatenate along the default axis (0)
+c = np.concatenate([a, b])   # array([1, 2, 3, 4, 5, 6])
+
+# Concatenate along a different axis
+# (arrays must have the same shape except in that axis)
+# e.g., for 2‑D arrays:
+# c = np.concatenate([a2d, b2d], axis=1)
+```
+
+**Parameters**
+
+- `arrays`: sequence of array‑like objects to join.  
+- `axis` (default `0`): the axis along which the arrays will be joined.  
+- `out`, `dtype`, `casting`: optional arguments for output array, data type, and casting rules.
+
+`np.concatenate` joins the arrays along the specified axis, producing a new array that contains all the input data in order.",Yes,Yes,Yes
+How do I create a DataFrame in pandas?,RETRIEVE,None | None | Page None; None | None | Page None; None | None | Page None; None | None | Page None; None | None | Page None,"To create a DataFrame in pandas, use the `pd.DataFrame` constructor and pass a dictionary (or list) of column data:
+
+```python
+import pandas as pd
+
+# Example using a dictionary
+df = pd.DataFrame({
+    'col1': [1, 2, 3],
+    'col2': ['a', 'b', 'c']
+})
+```
+
+This will produce a DataFrame with columns `col1` and `col2`. The constructor can also accept lists, NumPy arrays, or other DataFrames.",Yes,Yes,Yes
+What does train_test_split do in scikit-learn?,RETRIEVE,None | None | Page None; None | None | Page None; None | None | Page None; None | None | Page None; None | None | Page None,"`train_test_split` is a convenience function that splits one or more arrays (or matrices) into random training and test subsets.  
+It validates the inputs, then uses a `ShuffleSplit` internally to generate indices and returns the split data.  
+
+Key points from the documentation:
+
+* Accepts any indexable objects (lists, NumPy arrays, SciPy sparse matrices, pandas DataFrames).  
+* Parameters `test_size` and `train_size` control the proportion or absolute number of samples in each split.  
+* `random_state` seeds the random generator for reproducibility.  
+* `stratify` can be used to perform a stratified split based on a label array.  
+* Returns a list of length `2 * len(arrays)` containing the train and test splits for each input array.  
+
+The function is deprecated in `sklearn.cross_validation` and should be used from `sklearn.model_selection`.",Yes,Yes,Yes
+How do I normalize data using scikit-learn?,RETRIEVE,None | None | Page None; None | None | Page None; None | None | Page None; None | None | Page None; None | None | Page None,"**Normalizing data in scikit‑learn**
+
+scikit‑learn provides several transformers that scale or normalize your data.  
+The most common ones are:
+
+| Transformer | What it does | Typical usage |
+|-------------|--------------|---------------|
+| `StandardScaler` | Subtracts the mean and divides by the standard deviation (z‑score). | `X_scaled = StandardScaler().fit_transform(X)` |
+| `RobustScaler` | Uses the median and the inter‑quartile range, robust to outliers. | `X_scaled = RobustScaler().fit_transform(X)` |
+| `MinMaxScaler` | Scales each feature to a given range (default 0–1). | `X_scaled = MinMaxScaler().fit_transform(X)` |
+| `Normalizer` | Normalizes each sample (row) to a unit norm (`l1`, `l2`, or `max`). | `X_norm = Normalizer(norm='l2').fit_transform(X)` |
+
+### Example
+
+```python
+from sklearn.preprocessing import StandardScaler, RobustScaler, MinMaxScaler, Normalizer
+
+# X is your data matrix (n_samples × n_features)
+
+# 1. Standard scaling (z‑score)
+X_std = StandardScaler().fit_transform(X)
+
+# 2. Robust scaling (median & IQR)
+X_robust = RobustScaler().fit_transform(X)
+
+# 3. Min‑Max scaling to [0, 1]
+X_minmax = MinMaxScaler().fit_transform(X)
+
+# 4. Sample‑wise normalization to unit l2‑norm
+X_norm = Normalizer(norm='l2').fit_transform(X)
+```
+
+- `fit_transform` first learns the scaling parameters from `X` and then applies the transformation.
+- `Normalizer`’s `fit` method does nothing; it only rescales each sample.
+
+These transformers can also be used inside pipelines or with sparse matrices (e.g., CSR format for `Normalizer`).",Yes,Yes,Yes
+What is a Python list?,GENERAL,Official Python documentation,"For general Python documentation, visit the official Python documentation:
+https://docs.python.org/3/",N/A,N/A,Yes
+What is the capital of France?,OUT_OF_CONTEXT,N/A,This question is out of context.,N/A,N/A,Yes
+What is a python dictionary?,GENERAL,Official Python documentation,"For general Python documentation, visit the official Python documentation:
+https://docs.python.org/3/",N/A,N/A,Yes
+where is alexandria located?,OUT_OF_CONTEXT,N/A,This question is out of context.,N/A,N/A,Yes
